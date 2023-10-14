@@ -1,0 +1,105 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+// Structure to represent a task
+struct Task {
+    string description;
+    bool completed;
+
+    Task(const string& desc) : description(desc), completed(false) {}
+};
+
+// Function to add a task to the list
+void AddTask(vector<Task>& tasks, const string& description) {
+    tasks.push_back(Task(description));
+    cout << "Task added: " << description << endl;
+}
+
+// Function to view tasks with their status
+void ViewTasks(const vector<Task>& tasks) {
+    if (tasks.empty()) {
+        cout << "No tasks in the list." << endl;
+        return;
+    }
+
+    cout << "Task List:" << endl;
+    for (size_t i = 0; i < tasks.size(); ++i) {
+        const Task& task = tasks[i];
+        cout << "[" << (task.completed ? "X" : " ") << "] " << i + 1 << ". " << task.description << endl;
+    }
+}
+
+// Function to mark a task as completed
+void MarkTaskCompleted(vector<Task>& tasks, int taskIndex) {
+    if (taskIndex >= 1 && taskIndex <= static_cast<int>(tasks.size())) {
+        Task& task = tasks[taskIndex - 1];
+        task.completed = true;
+        cout << "Task marked as completed: " << task.description << endl;
+    } else {
+        cout << "Invalid task number." << endl;
+    }
+}
+
+// Function to remove a task from the list
+void RemoveTask(vector<Task>& tasks, int taskIndex) {
+    if (taskIndex >= 1 && taskIndex <= static_cast<int>(tasks.size())) {
+        cout << "Task removed: " << tasks[taskIndex - 1].description << endl;
+        tasks.erase(tasks.begin() + taskIndex - 1);
+    } else {
+        cout << "Invalid task number." << endl;
+    }
+}
+
+int main() {
+    vector<Task> tasks;
+    char choice;
+
+    do {
+        cout << "\nOptions:" << endl;
+        cout << "1. Add Task" << endl;
+        cout << "2. View Tasks" << endl;
+        cout << "3. Mark Task as Completed" << endl;
+        cout << "4. Remove Task" << endl;
+        cout << "5. Quit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case '1': {
+                cin.ignore();  // Clear the input buffer
+                cout << "Enter task description: ";
+                string description;
+                getline(cin, description);
+                AddTask(tasks, description);
+                break;
+            }
+            case '2':
+                ViewTasks(tasks);
+                break;
+            case '3': {
+                int taskIndex;
+                cout << "Enter the task number to mark as completed: ";
+                cin >> taskIndex;
+                MarkTaskCompleted(tasks, taskIndex);
+                break;
+            }
+            case '4': {
+                int taskIndex;
+                cout << "Enter the task number to remove: ";
+                cin >> taskIndex;
+                RemoveTask(tasks, taskIndex);
+                break;
+            }
+            case '5':
+                cout << "Goodbye!" << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+        }
+
+    } while (choice != '5');
+
+    return 0;
+}
